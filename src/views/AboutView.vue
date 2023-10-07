@@ -19,7 +19,6 @@ h1 {
 
 @media (min-width: 1024px) {
   .about {
-    /* min-height: 100vh; */
     align-items: center;
   }
 }

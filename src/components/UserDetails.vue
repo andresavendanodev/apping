@@ -9,7 +9,7 @@
       <div class="card">
         <img :src="user.avatar" alt="Avatar" />
         <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-        <p>Correo Electrónico: {{ user.email }}</p>
+        <p>{{ user.email }}</p>
       </div>
     </div>
     <div v-else>
@@ -20,6 +20,7 @@
   
 <script>
 import SpinnerLoad from "./SpinnerLoad.vue";
+import { useUsersStore } from "../stores/users";
 
 export default {
   name: "UserDetails",
@@ -33,8 +34,11 @@ export default {
     };
   },
   async created() {
-    // Recupera el ID del usuario de los parámetros de la ruta
-    const userId = this.$route.params.id;
+    // console.log("Pinia");
+    const useStore = useUsersStore() ;
+    // const userId = this.$route.params.id;
+    const userId = useStore.selectedUserId;
+    // console.log(userId);
 
     try {
       const response = await fetch(`https://reqres.in/api/users/${userId}`);
@@ -48,7 +52,7 @@ export default {
     } catch (error) {
       console.error(error);
     } finally {
-      this.isLoading = false; // Oculta el SpinnerLoad cuando los datos se cargan o si hay un error.
+      this.isLoading = false;
     }
   },
 };

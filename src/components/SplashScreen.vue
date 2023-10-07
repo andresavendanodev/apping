@@ -1,4 +1,5 @@
 <template>
+    <!-- Un SplashScreen para la carga de la pagina y la lista de los usuarios -->
     <div class="splash-screen">
       <div class="spinner"></div>
     </div>

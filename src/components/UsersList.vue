@@ -3,10 +3,8 @@
     <SplashScreen v-if="isLoading" />
     <h1>Lista de Usuarios</h1>
     <ul>
-      <li v-for="user in users" :key="user.id">
-        <router-link :to="{ name: 'UserDetails', params: { id: user.id } }">
-          {{ user.first_name }} {{ user.last_name }}
-        </router-link>
+      <li v-for="user in users" :key="user.id" @click="goToUserDetails(user.id)" >
+        {{ user.first_name }} {{ user.last_name }}
       </li>
     </ul>
   </div>
@@ -15,6 +13,8 @@
 <script>
 import { ref, onMounted } from "vue";
 import SplashScreen from "@/components/SplashScreen.vue";
+import { useUsersStore } from "../stores/users";
+import { useRouter } from "vue-router";
 
 export default {
   name: "UsersList",
@@ -24,7 +24,15 @@ export default {
   setup() {
     const users = ref([]);
     const isLoading = ref(true);
+    const useStore = useUsersStore() ;
+    const router = useRouter();
 
+    const goToUserDetails = (userId) => {
+      console.log(userId);
+      useStore.setSelectedUserId(userId);
+      router.push("/user");
+    };
+    
     const fetchUsers = async () => {
       try {
         const response = await fetch("https://reqres.in/api/users");
@@ -38,7 +46,7 @@ export default {
       } catch (error) {
         console.error(error);
       } finally {
-        isLoading.value = false; // Ocultar el SplashScreen una vez que los datos se carguen o si hay un error.
+        isLoading.value = false;
       }
     };
 
@@ -49,6 +57,7 @@ export default {
     return {
       users,
       isLoading,
+      goToUserDetails
     };
   },
 };
@@ -64,5 +73,9 @@ ul {
 }
 ul li {
   margin: 12px 0;
+  cursor: pointer;
+}
+ul li:hover {
+  background-color: rgba(22, 163, 18, 0.418);
 }
 </style>
